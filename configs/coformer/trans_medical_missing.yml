@@ -1,0 +1,53 @@
+# trans_medical_missing.yml
+# ==========================
+# trans_medical.yml 복사본. batch_size만 2 -> 16으로 변경 (MTM과 동일 배치 크기).
+# 원본 trans_medical.yml, CoFormer 코드는 미수정 — 이 파일만 신규 추가.
+#
+# results_root_dir는 src/models/coformer.py의 RobotAIConfig가 무시하고
+# OUTPUTS_ROOT/"coformer"에 고정 앵커한다(cwd 의존 제거) — 여기 값은 참고용.
+
+# ------------------- General Options -------------------------
+
+description                  : Masktrans_missing
+results_root_dir             : results
+seed                         : 1
+dataset                      : football
+
+# ------------------- Feature Extractor -------------------------
+
+past_length                 : 8
+future_length               : 8
+whole_length                : 24
+num_variate                 : 23
+
+traj_scale                   : 1
+motion_dim                   : 2
+forecast_dim                 : 2
+
+
+
+# ------------------- Model -------------------------
+
+input_dim: 2
+output_dim: 2
+h_dim: 256
+m_dim: 512
+head: 8
+dropout: 0.1
+N: 6
+heads                       : 8
+
+
+# ------------------- Training Parameters -------------------------
+
+lr                           : 1.e-5
+
+
+batch_size: 16
+num_epochs                   : 50
+lr_fix_epochs                : 10
+lr_scheduler: 'step'
+decay_step: 15
+decay_gamma: 0.5
+print_freq                   : 5000
+model_save_freq              : 10

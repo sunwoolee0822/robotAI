@@ -1,0 +1,6 @@
+[submodule "external/coformer"]
+	path = external/coformer
+	url = https://github.com/MediaBrain-SJTU/CoFormer.git
+[submodule "external/mtm"]
+	path = external/mtm
+	url = https://github.com/zshhans/MTM.git

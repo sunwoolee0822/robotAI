@@ -3,6 +3,28 @@
 설문 + 웨어러블 센서 시계열을 이용한 이진 분류. CoFormer 백본 위에 PyTorch Lightning
 학습 파이프라인과 분석 코드를 붙였다.
 
+## 외부 서브모듈 (submodule)
+
+`external/`에 두 백본 저장소를 git submodule로 고정 커밋에 핀(pin)해서 둔다.
+원본은 수정하지 않는 것이 원칙이며, fp16 학습에 필요한 최소 수정은
+[patches/](patches/)의 패치로 별도 관리한다.
+
+| 경로                  | 저장소                                                                 | 고정 커밋                                    |
+| --------------------- | ---------------------------------------------------------------------- | -------------------------------------------- |
+| `external/coformer` | [MediaBrain-SJTU/CoFormer](https://github.com/MediaBrain-SJTU/CoFormer) | `69261dbd2578994f758182fdce8ef36dc2205ed6` |
+| `external/mtm`      | [zshhans/MTM](https://github.com/zshhans/MTM)                           | `5cc68179b98647a836aaf75c265d36e777ba56ca` |
+
+클론 직후 또는 서브모듈을 최신화한 뒤에는 아래를 실행해 커밋을 고정하고 패치를 적용한다
+(멱등적이라 여러 번 실행해도 안전):
+
+```bash
+./setup.sh
+```
+
+> 이 저장소는 새 구조(`external/` submodule + `src/`)로 이관 중이다.
+> 아래 "외부 의존성: CoFormer" 절부터는 이관 전(前) 레이아웃 설명이며,
+> 코드 이관이 끝나면 정리된다.
+
 ## 외부 의존성: CoFormer
 
 **이 저장소에는 CoFormer 코드가 포함되어 있지 않다.** 별도로 clone 해야 한다.
@@ -39,12 +61,12 @@ self-contained 파일이라, 나머지(`train_medical.py`, `data/dataloader.py`,
 
 검증된 조합 (Python 3.10):
 
-| 패키지 | 버전 |
-|---|---|
-| torch | 2.4.0+cu121 |
-| dgl | 2.4.0+cu121 |
-| pytorch-lightning | 2.6.4 |
-| torchmetrics | 1.9.0 |
+| 패키지            | 버전        |
+| ----------------- | ----------- |
+| torch             | 2.4.0+cu121 |
+| dgl               | 2.4.0+cu121 |
+| pytorch-lightning | 2.6.4       |
+| torchmetrics      | 1.9.0       |
 
 ```bash
 pip install torch==2.4.0 --index-url https://download.pytorch.org/whl/cu121
@@ -65,14 +87,14 @@ python data/step2_coformer.py   # window 72slot(3일), stride 24slot(1일) → n
 
 `step2` 출력 (`data/numpy_all_chunk_72_24feat/`):
 
-| 파일 | 내용 |
-|---|---|
-| `array.npy` | 센서 시계열 |
-| `time.npy` | 타임스탬프 (불규칙 간격 인코딩용) |
-| `static.npy` | 정적 피처 |
-| `mask.npy` | 결측 마스크 |
-| `gt.npy` | 라벨 (0/1) |
-| `split.npy` | `[train_idx, val_idx, test_idx]` |
+| 파일           | 내용                               |
+| -------------- | ---------------------------------- |
+| `array.npy`  | 센서 시계열                        |
+| `time.npy`   | 타임스탬프 (불규칙 간격 인코딩용)  |
+| `static.npy` | 정적 피처                          |
+| `mask.npy`   | 결측 마스크                        |
+| `gt.npy`     | 라벨 (0/1)                         |
+| `split.npy`  | `[train_idx, val_idx, test_idx]` |
 
 ## 학습
 
@@ -105,21 +127,17 @@ weight_decay, lr_factor, patience).
 
 ## 구성
 
-| 파일 | 역할 |
-|---|---|
-| `train.py` | 학습 엔트리포인트 (Lightning Trainer) |
-| `module.py` | LightningModule — AdamW + ReduceLROnPlateau, 6종 metric (f1/auroc/auprc/acc/prec/rec) |
-| `data/dataset.py` | Dataset / DataModule, oversampling sampler |
-| `data/step1_prepare.py`, `data/step2_coformer.py` | 전처리 |
-| `make_group_splits.py` | 결측률 high/low 그룹별 split 생성 |
-| `make_missing_*.py` | 결측 시나리오별 test split 생성 |
-| `analysis*.py`, `plot1.py`, `make_figures.py` | 결과 분석 및 그림 |
-| `extra_attention.py` | 어텐션 맵 시각화 |
+| 파일                                                  | 역할                                                                                                                                                                                                       |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `train.py`                                          | 학습 엔트리포인트 (Lightning Trainer)                                                                                                                                                                      |
+| `module.py`                                         | LightningModule — AdamW + ReduceLROnPlateau, 6종 metric (f1/auroc/auprc/acc/prec/rec)                                                                                                                     |
+| `data/dataset.py`                                   | Dataset / DataModule, oversampling sampler                                                                                                                                                                 |
+| `data/step1_prepare.py`, `data/step2_coformer.py` | 전처리                                                                                                                                                                                                     |
+| `analysis/v1_336/`                                  | 초기(336/14일 단위) 결측률·클러스터링 분석 및 그림                                                                                                                                                        |
+| `analysis/v2_72/`                                   | 72h 전처리 데이터 기준 분석 —`analysis1_72.py` 등, `make_group_splits.py`/`make_missing_*.py`(split·결측 시나리오 생성), `plot1.py`/`make_figures.py`(그림), `extra_attention.py`(어텐션 맵) |
 
 ## 참고
 
 - CoFormer: https://github.com/MediaBrain-SJTU/CoFormer
-
-
 
 아으-------

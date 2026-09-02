@@ -1,8 +1,0 @@
-seed: 42
-num_epochs: 100
-batch_size: 16
-accumulate_grad_batches: 1
-lr: 1.0e-5
-weight_decay: 0.0
-lr_factor: 0.2
-patience: 10

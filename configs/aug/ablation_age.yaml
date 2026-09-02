@@ -1,0 +1,8 @@
+# W6 ablation: cell=AgeGroup만, label 없음.
+# 주의: 실제로 파싱되는 필드는 method/ablation뿐 — cell_axes/use_label/suffix는
+# src/augment/build.py의 ABLATIONS[ablation] 참조용 주석(고쳐도 실행에 반영 안 됨).
+method: group_aware
+ablation: age
+cell_axes: [AgeGroup]
+use_label: false
+suffix: "_age"

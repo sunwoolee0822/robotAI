@@ -1,31 +1,28 @@
-# ── 외부 저장소 (직접 clone 해서 사용, README 참고) ──────────────
-# CoFormer/
-
-# ── 데이터 (124GB, 환자 데이터 포함) ──────────────────────────────
-data/*
-!data/*.py
+# ── 데이터 (레포 밖, DATA_ROOT로 주입) ──
+dataset/
 *.npz
 *.npy
-lmm_table.csv
+*.h5
+*.parquet
 
-# ── 학습 산출물 ────────────────────────────────────────────────
+# ── 학습 산출물 ──
+outputs/
 logs/
 lightning_logs/
 wandb/
 checkpoints/
 *.ckpt
 *.pth
+*.pkl
 *.csv
+!results/**/*.csv
 
-# ── 분석 결과물 (그림/표) ──────────────────────────────────────
-analysis_336/
-# analysis_72/
-analysis/**/*.png
-analysis/**/*.pdf
-analysis/**/*.svg
-analysis/**/*.csv
+# ── 분석 결과물 ──
+src/analysis/**/*.png
+src/analysis/**/*.pdf
+src/analysis/**/*.svg
 
-# ── 파이썬 / 툴링 ──────────────────────────────────────────────
+# ── 파이썬 / 툴링 ──
 __pycache__/
 *.py[cod]
 *.bak
@@ -35,7 +32,8 @@ __pycache__/
 .venv/
 venv/
 
-# ── 에디터 ─────────────────────────────────────────────────────
+# ── 에디터 ──
+.claude/
 .vscode/
 .idea/
-.DS_Store
+.DS_Storedata/

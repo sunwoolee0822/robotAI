@@ -1,0 +1,191 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{table*}[t]
+\centering
+\caption{MTM classification results for a single run (seed 2024).
+The best result within each target is shown in bold, and the
+second-best result is underlined. All metric values are percentages. Test N denotes the number of unique subjects in each run-specific test split.}
+\label{tab:mtm_seed2024}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Method}
+& \textbf{Test N}
+& \textbf{AUROC}
+& \textbf{AUPRC}
+& \textbf{Accuracy}
+& \textbf{Precision}
+& \textbf{Recall}
+& \textbf{F1-Score} \\
+\midrule
+
+PHQ9-baseline
+& 2730
+& \underline{69.05}
+& \underline{29.54}
+& 63.27
+& 21.53
+& \textbf{62.17}
+& \underline{31.98} \\
+
+PHQ9-low\_missing
+& 1366
+& \textbf{72.43}
+& \textbf{33.08}
+& 71.89
+& \textbf{27.40}
+& \underline{55.64}
+& \textbf{36.72} \\
+
+PHQ9-high\_missing
+& 1358
+& 64.71
+& 23.78
+& \textbf{78.38}
+& 24.24
+& 30.27
+& 26.92 \\
+
+PHQ9-augmented\_uniform
+& 2724
+& 66.82
+& 27.28
+& 77.85
+& 26.92
+& 34.57
+& 30.27 \\
+
+PHQ9-augmented\_age
+& 2724
+& 66.13
+& 27.07
+& 67.88
+& 21.77
+& 50.51
+& 30.43 \\
+
+PHQ9-augmented\_age\_sex
+& 2724
+& 66.22
+& 27.20
+& \underline{77.88}
+& \underline{27.28}
+& 35.47
+& 30.84 \\
+
+PHQ9-augmented\_full
+& 2724
+& 66.05
+& 26.78
+& 73.79
+& 24.28
+& 41.78
+& 30.71 \\
+
+\midrule
+
+GAD7-baseline
+& 2730
+& \underline{71.67}
+& \underline{21.21}
+& 67.94
+& 14.53
+& \underline{61.13}
+& \underline{23.48} \\
+
+GAD7-low\_missing
+& 1366
+& \textbf{75.50}
+& \textbf{25.36}
+& \underline{72.95}
+& \textbf{17.13}
+& \textbf{61.45}
+& \textbf{26.79} \\
+
+GAD7-high\_missing
+& 1358
+& 66.44
+& 17.91
+& \textbf{79.62}
+& \underline{15.53}
+& 33.30
+& 21.18 \\
+
+GAD7-augmented\_uniform
+& 2724
+& 68.20
+& 19.17
+& 65.98
+& 13.09
+& 56.41
+& 21.25 \\
+
+GAD7-augmented\_age
+& 2724
+& 68.37
+& 19.34
+& 65.27
+& 13.26
+& 58.97
+& 21.66 \\
+
+GAD7-augmented\_age\_sex
+& 2724
+& 68.19
+& 19.31
+& 65.68
+& 13.21
+& 57.74
+& 21.50 \\
+
+GAD7-augmented\_full
+& 2724
+& 68.17
+& 19.02
+& 69.36
+& 13.78
+& 52.62
+& 21.84 \\
+
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+
+\begin{table}[t]
+\centering
+\caption{Class-label distribution in each run-specific MTM test split.
+Patient percentage is calculated at the window level.}
+\label{tab:mtm_label_distribution}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+\textbf{Target}
+& \textbf{Dataset}
+& \textbf{Subject N}
+& \textbf{Control windows}
+& \textbf{Patient windows}
+& \textbf{Patient (\%)}
+& \textbf{Control:Patient} \\
+\midrule
+PHQ9 & Baseline             & 2730 & 23321 & 3762 & 13.89 & 6.20:1 \\
+PHQ9 & Low missing          & 1366 & 10224 & 1756 & 14.66 & 5.82:1 \\
+PHQ9 & High missing         & 1358 & 10404 & 1576 & 13.16 & 6.60:1 \\
+PHQ9 & Augmented (all four) & 2724 & 20628 & 3332 & 13.91 & 6.19:1 \\
+\midrule
+GAD7 & Baseline             & 2730 & 24904 & 2179 &  8.05 & 11.43:1 \\
+GAD7 & Low missing          & 1366 & 11015 &  965 &  8.06 & 11.41:1 \\
+GAD7 & High missing         & 1358 & 10995 &  985 &  8.22 & 11.16:1 \\
+GAD7 & Augmented (all four) & 2724 & 22010 & 1950 &  8.14 & 11.29:1 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\end{document}

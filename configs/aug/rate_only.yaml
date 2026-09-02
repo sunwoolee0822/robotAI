@@ -1,0 +1,23 @@
+# rate-only 베이스라인: 셀 구분(성별x나이x환자/대조)은 group_aware_full.yaml과 동일하게
+# 유지하고, 결측 주입 "모양"만 다르게 한다 — burst(시간대 응집) 재현을 끄고 bin
+# Bernoulli만 사용(inject_mode=bernoulli_only). 목표 결측률(얼마나)은 full과 같은
+# high 유래 pool을 쓰므로 블록별 최종 결측률은 통계적으로 일치해야 하고(빌드 로그의
+# "블록별 결측률 vs full" 비교로 확인), burst가 실제 적용되던 p==1+cohesive 블록에서만
+# full과 실질적 차이가 생긴다(그 외 블록은 원래도 Bernoulli).
+#
+# 주의(작업 0 조사 결과): 이 yaml에서 build_dataset.py가 실제로 파싱하는 필드는
+# `method`, `ablation` 뿐이다. `cell_axes`/`use_label`/`suffix`는 src/augment/build.py의
+# ABLATIONS[ablation] 딕셔너리가 최종 소스이며, 아래 값은 그 딕셔너리 내용을 옮겨 적은
+# "참조용" 주석에 불과하다 — 여기를 고쳐도 실행에는 반영되지 않는다(예전에 이 필드들이
+# 죽어있는 걸 몰라서 rate_only.yaml이 ablation_uniform.yaml과 동일하게 동작하던 버그가
+# 났었다). 실제 동작을 바꾸려면 build.py의 ABLATIONS를 고쳐야 한다.
+#
+# 참고: analysis/v2_72/make_missing_transfer.py, make_missing_transfer_iou.py가
+# 이 이름과 같은 의도(rate-only 베이스라인)로 먼저 시도됐던 스크립트이지만,
+# 산출물이 실제로 쓰인 흔적이 없어(미실행) 이번 이관 대상에 포함하지 않았다.
+method: group_aware
+ablation: rate_only
+cell_axes: [Sex, AgeGroup]
+use_label: true
+inject_mode: bernoulli_only
+suffix: "_rate_only"
