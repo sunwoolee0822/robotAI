@@ -1,0 +1,13 @@
+diff --git a/models/model_medical_attn_aggre.py b/models/model_medical_attn_aggre.py
+index 758154b..bb738cf 100644
+--- a/models/model_medical_attn_aggre.py
++++ b/models/model_medical_attn_aggre.py
+@@ -187,7 +187,7 @@ def attention(query, key, value, mask=None, dropout=None):
+     # print('score',scores.shape,'mask',mask.shape)
+ 
+     if mask is not None:
+-        scores = scores.masked_fill(mask == 0, -1e10) #mask必须是一个ByteTensor 而且shape必须和 a一样 并且元素只能是 0或者1 ，是将 mask中为1的 元素所在的索引，在a中相同的的索引处替换为 value  ,mask value必须同为tensor
++        scores = scores.masked_fill(mask == 0, -1e4) #mask必须是一个ByteTensor 而且shape必须和 a一样 并且元素只能是 0或者1 ，是将 mask中为1的 元素所在的索引，在a中相同的的索引处替换为 value  ,mask value必须同为tensor
+     p_attn = F.softmax(scores, dim = -1)
+     if dropout is not None:
+         p_attn = dropout(p_attn)
